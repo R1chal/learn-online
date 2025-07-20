@@ -6,6 +6,10 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -26,6 +30,7 @@ public class Employee extends Model<Employee> {
     /**
      * 姓名
      */
+    @NotEmpty(message = "用户名不能为空")
     @TableField("real_name")
     private String realName;
     /**
@@ -35,6 +40,8 @@ public class Employee extends Model<Employee> {
     /**
      * 邮箱
      */
+
+    @Email(message = "邮箱格式不正确")
     private String email;
     /**
      * 创建时间
@@ -53,6 +60,7 @@ public class Employee extends Model<Employee> {
     /**
      * 员工类型 ， 1平台普通员工 ，2平台客服人员，3平台管理员，4机构员工，5,机构管理员或其他
      */
+    @NotNull(message = "必填字段")
     private Integer type;
     @TableField("login_id")
     private Long loginId;

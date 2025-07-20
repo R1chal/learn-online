@@ -1,5 +1,6 @@
 package com.richal.learnonline.result;
 
+import com.richal.learnonline.constant.ErrorCode;
 import lombok.Data;
 
 //返回JSON结果
@@ -54,9 +55,14 @@ public class JSONResult {
         return error(message,null);
     }
 
-//    public static JSONResult error(CommonErrorCode errorCode){
-//        return error(errorCode.getMesssage(),errorCode.getCode());
-//    }
-
+    /**
+     * 自定义方法
+     *
+     * @param errorCode errorCode
+     * @return result
+     */
+    public static JSONResult error(ErrorCode errorCode){
+        return error(errorCode.getMessage(),errorCode.getCode());
+    }
 
 }
