@@ -1,0 +1,22 @@
+server:
+  port: 10040
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: service-uaa #服务名
+  datasource:
+    url: jdbc:mysql:///learn-online-uaa?serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  main:
+    allow-bean-definition-overriding: true
+
+mybatis-plus:
+  mapper-locations: classpath:com/richal/learnonline/mapper/*Mapper.xml
+
+
