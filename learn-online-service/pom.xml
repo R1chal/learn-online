@@ -15,6 +15,7 @@
         <module>learn-online-service-system</module>
         <module>learn-online-service-uaa</module>
         <module>learn-online-service-user</module>
+        <module>learn-online-service-common</module>
     </modules>
 
     <properties>
