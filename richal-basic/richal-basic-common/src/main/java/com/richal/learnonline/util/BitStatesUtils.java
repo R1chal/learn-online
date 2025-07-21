@@ -70,6 +70,8 @@ public class BitStatesUtils {
 	}
 	
 	/**
+	 * 删除状态
+	 *
 	 * @param states 已有状态值
 	 * @param value  需要删除状态值
 	 * @return 新的状态值

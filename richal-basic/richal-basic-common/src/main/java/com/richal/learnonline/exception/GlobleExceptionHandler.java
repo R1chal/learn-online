@@ -20,7 +20,7 @@ public class GlobleExceptionHandler {
     /**
      * 拦截异常
      *
-     * @param e e
+     * @param e exception
      * @return JSONResult
      */
     @ExceptionHandler(GlobleBusinessException.class)
@@ -32,7 +32,7 @@ public class GlobleExceptionHandler {
     /**
      * 拦截器其他异常
      *
-     * @param e e
+     * @param e exception
      * @return JSONResult
      */
     @ExceptionHandler(Exception.class)
@@ -44,7 +44,7 @@ public class GlobleExceptionHandler {
     /**
      * 拦截空值异常
      *
-     * @param e e
+     * @param e exception
      * @return JSONResult
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)

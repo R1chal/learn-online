@@ -5,9 +5,13 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-/**--------------------------------------------------------
-封装分页查询结果
---------------------------------------------------------**/
+/**
+ * 封装分页查询结果
+ *
+ * @param <T>
+ * @author Richal
+ * @since 2025/07/21
+ */
 @Data
 public class PageList<T> {
 
@@ -25,4 +29,5 @@ public class PageList<T> {
         this.total = total;
         this.rows = rows;
     }
+
 }

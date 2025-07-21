@@ -3,7 +3,12 @@ package com.richal.learnonline.result;
 import com.richal.learnonline.constant.ErrorCode;
 import lombok.Data;
 
-//返回JSON结果
+/**
+ * 封装 Rest 接口返回结果
+ *
+ * @author Richal
+ * @since 2025/07/21
+ */
 @Data
 public class JSONResult {
 
@@ -11,17 +16,16 @@ public class JSONResult {
 
     private String message = "成功";
 
-    //错误码，用来描述错误类型 ，20000 表示么有错误
+    //错误码，用来描述错误类型 ，20000 表示没有错误
     private String code = "20000";
 
     //返回的数据
     private Object data;
 
-    /** 创建当前实例 **/
     public static JSONResult success(){
         return new JSONResult();
     }
-    /** 创建当前实例 **/
+
     public static JSONResult success(Object obj){
         JSONResult instance = new JSONResult();
         instance.setData(obj);
@@ -34,7 +38,6 @@ public class JSONResult {
         instance.setData(obj);
         return instance;
     }
-    /** 创建当前实例 **/
 
     public static JSONResult error(String message,String code){
         JSONResult instance = new JSONResult();
@@ -50,7 +53,6 @@ public class JSONResult {
         return jsonResult;
     }
 
-    /** 创建当前实例 **/
     public static JSONResult error(String message){
         return error(message,null);
     }
