@@ -5,6 +5,9 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+    alibaba:
+      seata:
+        tx-service-group: fsp_tx_group #这里和file.conf中事务组名一样
   application:
     name: service-uaa #服务名
   datasource:
@@ -18,5 +21,8 @@ spring:
 
 mybatis-plus:
   mapper-locations: classpath:com/richal/learnonline/mapper/*Mapper.xml
+
+seata:
+  enableAutoDataSourceProxy: false #关闭DataSource代理的自动配置，我们要手动配置
 
 

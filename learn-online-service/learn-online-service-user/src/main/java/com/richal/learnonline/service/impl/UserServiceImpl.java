@@ -18,6 +18,7 @@ import com.richal.learnonline.service.IUserAccountService;
 import com.richal.learnonline.service.IUserBaseInfoService;
 import com.richal.learnonline.service.IUserService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -48,6 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private IUserBaseInfoService userBaseInfoService;
 
     @Override
+    @GlobalTransactional(rollbackFor = Exception.class)
     public void phoneRegister(RegisterParamsDto registerParamsDto) {
         String mobile = registerParamsDto.getMobile();
         String password = registerParamsDto.getPassword();
@@ -110,6 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .build();
         userAccountService.insert(userAccount);
 
+        int i = 1 / 0;
         UserBaseInfo userBaseInfo = UserBaseInfo.builder()
                 .id(loginId)
                 .createTime(time)
