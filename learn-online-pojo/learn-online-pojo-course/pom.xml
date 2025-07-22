@@ -7,22 +7,34 @@
         <groupId>com.richal.learnonline</groupId>
         <artifactId>learn-online</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>learn-online-service</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>learn-online-service-system</module>
-        <module>learn-online-service-uaa</module>
-        <module>learn-online-service-user</module>
-        <module>learn-online-service-common</module>
-        <module>learn-online-service-course</module>
-    </modules>
+    <artifactId>learn-online-pojo-course</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.richal.learnonline</groupId>
+            <artifactId>richal-basic-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

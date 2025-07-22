@@ -15,6 +15,7 @@
         <module>learn-online-api</module>
         <module>learn-online-pojo</module>
         <module>learn-online-support</module>
+        <module>learn-online-pojo/learn-online-pojo-course</module>
     </modules>
 
     <!--打包方式：pom,代表这个项目只是做pom管理，不写代码-->

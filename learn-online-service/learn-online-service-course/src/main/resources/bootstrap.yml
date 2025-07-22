@@ -1,0 +1,20 @@
+  spring:
+    main:
+      allow-bean-definition-overriding: true
+    profiles:
+      active: dev
+    application:
+      name: service-course
+    cloud:
+      nacos:
+        discovery:
+          server-addr: localhost:8848 #注册中心
+        config:
+          server-addr: localhost:8848 #配置中心
+          file-extension: yaml #配置文件格式
+          prefix: application-course #配置前缀 ，默认使用sring.application.name
+          group: DEFAULT_GROUP
+          namespace: a718085c-1cbc-4d37-8f8a-91f7e49d9435
+
+
+
