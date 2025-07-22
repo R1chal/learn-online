@@ -44,6 +44,13 @@ public class Login extends Model<Login> {
     private String clientSecret;
     private String avatar;
 
+    // 私有构造函数，供Builder使用
+    public Login() {}
+    
+    // 静态方法创建Builder实例
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public Long getId() {
         return id;
@@ -153,5 +160,69 @@ public class Login extends Model<Login> {
         ", clientSecret=" + clientSecret +
         ", avatar=" + avatar +
         "}";
+    }
+    
+    // Builder内部类
+    public static class Builder {
+        private Login login = new Login();
+        
+        public Builder id(Long id) {
+            login.setId(id);
+            return this;
+        }
+        
+        public Builder username(String username) {
+            login.setUsername(username);
+            return this;
+        }
+        
+        public Builder password(String password) {
+            login.setPassword(password);
+            return this;
+        }
+        
+        public Builder type(Integer type) {
+            login.setType(type);
+            return this;
+        }
+        
+        public Builder enabled(Boolean enabled) {
+            login.setEnabled(enabled);
+            return this;
+        }
+        
+        public Builder accountNonExpired(Boolean accountNonExpired) {
+            login.setAccountNonExpired(accountNonExpired);
+            return this;
+        }
+        
+        public Builder credentialsNonExpired(Boolean credentialsNonExpired) {
+            login.setCredentialsNonExpired(credentialsNonExpired);
+            return this;
+        }
+        
+        public Builder accountNonLocked(Boolean accountNonLocked) {
+            login.setAccountNonLocked(accountNonLocked);
+            return this;
+        }
+        
+        public Builder clientId(String clientId) {
+            login.setClientId(clientId);
+            return this;
+        }
+        
+        public Builder clientSecret(String clientSecret) {
+            login.setClientSecret(clientSecret);
+            return this;
+        }
+        
+        public Builder avatar(String avatar) {
+            login.setAvatar(avatar);
+            return this;
+        }
+        
+        public Login build() {
+            return login;
+        }
     }
 }

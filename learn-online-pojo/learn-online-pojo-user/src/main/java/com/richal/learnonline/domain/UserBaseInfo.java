@@ -59,6 +59,13 @@ public class UserBaseInfo extends Model<UserBaseInfo> {
     private String areaCode;
     private String address;
 
+    // 构造函数，供Builder使用
+    public UserBaseInfo() {}
+    
+    // 静态方法创建Builder实例
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public Long getId() {
         return id;
@@ -177,5 +184,74 @@ public class UserBaseInfo extends Model<UserBaseInfo> {
         ", areaCode=" + areaCode +
         ", address=" + address +
         "}";
+    }
+    
+    // Builder内部类
+    public static class Builder {
+        private UserBaseInfo userBaseInfo = new UserBaseInfo();
+        
+        public Builder id(Long id) {
+            userBaseInfo.setId(id);
+            return this;
+        }
+        
+        public Builder createTime(Long createTime) {
+            userBaseInfo.setCreateTime(createTime);
+            return this;
+        }
+        
+        public Builder updateTime(Long updateTime) {
+            userBaseInfo.setUpdateTime(updateTime);
+            return this;
+        }
+        
+        public Builder regChannel(Integer regChannel) {
+            userBaseInfo.setRegChannel(regChannel);
+            return this;
+        }
+        
+        public Builder qq(String qq) {
+            userBaseInfo.setQq(qq);
+            return this;
+        }
+        
+        public Builder level(Integer level) {
+            userBaseInfo.setLevel(level);
+            return this;
+        }
+        
+        public Builder growScore(Integer growScore) {
+            userBaseInfo.setGrowScore(growScore);
+            return this;
+        }
+        
+        public Builder referId(Long referId) {
+            userBaseInfo.setReferId(referId);
+            return this;
+        }
+        
+        public Builder sex(Integer sex) {
+            userBaseInfo.setSex(sex);
+            return this;
+        }
+        
+        public Builder birthday(Date birthday) {
+            userBaseInfo.setBirthday(birthday);
+            return this;
+        }
+        
+        public Builder areaCode(String areaCode) {
+            userBaseInfo.setAreaCode(areaCode);
+            return this;
+        }
+        
+        public Builder address(String address) {
+            userBaseInfo.setAddress(address);
+            return this;
+        }
+        
+        public UserBaseInfo build() {
+            return userBaseInfo;
+        }
     }
 }

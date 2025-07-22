@@ -65,4 +65,16 @@ public class LoginController {
         page = loginService.selectPage(page);
         return JSONResult.success(new PageList<Login>(page.getTotal(),page.getRecords()));
     }
+
+    /**
+     * 注册功能
+     *
+     * @param login login
+     * @return result
+     */
+    @PostMapping("/register")
+    public JSONResult register(@RequestBody Login login){
+        loginService.insert(login);
+        return JSONResult.success(login);
+    }
 }

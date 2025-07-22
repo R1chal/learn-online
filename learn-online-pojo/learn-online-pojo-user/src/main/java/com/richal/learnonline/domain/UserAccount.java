@@ -33,6 +33,13 @@ public class UserAccount extends Model<UserAccount> {
      */
     private String password;
 
+    // 构造函数，供Builder使用
+    public UserAccount() {}
+    
+    // 静态方法创建Builder实例
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public Long getId() {
         return id;
@@ -97,5 +104,44 @@ public class UserAccount extends Model<UserAccount> {
         ", updateTime=" + updateTime +
         ", password=" + password +
         "}";
+    }
+    
+    // Builder内部类
+    public static class Builder {
+        private UserAccount userAccount = new UserAccount();
+        
+        public Builder id(Long id) {
+            userAccount.setId(id);
+            return this;
+        }
+        
+        public Builder usableAmount(BigDecimal usableAmount) {
+            userAccount.setUsableAmount(usableAmount);
+            return this;
+        }
+        
+        public Builder frozenAmount(BigDecimal frozenAmount) {
+            userAccount.setFrozenAmount(frozenAmount);
+            return this;
+        }
+        
+        public Builder createTime(Long createTime) {
+            userAccount.setCreateTime(createTime);
+            return this;
+        }
+        
+        public Builder updateTime(Long updateTime) {
+            userAccount.setUpdateTime(updateTime);
+            return this;
+        }
+        
+        public Builder password(String password) {
+            userAccount.setPassword(password);
+            return this;
+        }
+        
+        public UserAccount build() {
+            return userAccount;
+        }
     }
 }

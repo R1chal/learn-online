@@ -1,5 +1,6 @@
 package com.richal.learnonline.web.controller;
 
+import com.richal.learnonline.dto.RegisterParamsDto;
 import com.richal.learnonline.service.IUserService;
 import com.richal.learnonline.domain.User;
 import com.richal.learnonline.query.UserQuery;
@@ -64,5 +65,17 @@ public class UserController {
         Page<User> page = new Page<User>(query.getPage(),query.getRows());
         page = userService.selectPage(page);
         return JSONResult.success(new PageList<User>(page.getTotal(),page.getRecords()));
+    }
+
+    /**
+     * 注册功能
+     *
+     * @param registerParamsDto registerParamsDto
+     * @return result
+     */
+    @PostMapping("/register")
+    public JSONResult register(@RequestBody RegisterParamsDto registerParamsDto){
+        userService.phoneRegister(registerParamsDto);
+        return JSONResult.success();
     }
 }
