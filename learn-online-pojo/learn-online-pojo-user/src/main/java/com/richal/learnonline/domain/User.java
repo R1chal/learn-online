@@ -57,6 +57,13 @@ public class User extends Model<User> {
     @TableField("login_id")
     private Long loginId;
 
+    // 私有构造函数，供Builder使用
+    public User() {}
+    
+    // 静态方法创建Builder实例
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public Long getId() {
         return id;
@@ -157,5 +164,64 @@ public class User extends Model<User> {
         ", secLevel=" + secLevel +
         ", loginId=" + loginId +
         "}";
+    }
+    
+    // Builder内部类
+    public static class Builder {
+        private User user = new User();
+        
+        public Builder id(Long id) {
+            user.setId(id);
+            return this;
+        }
+        
+        public Builder createTime(Long createTime) {
+            user.setCreateTime(createTime);
+            return this;
+        }
+        
+        public Builder updateTime(Long updateTime) {
+            user.setUpdateTime(updateTime);
+            return this;
+        }
+        
+        public Builder thirdUid(String thirdUid) {
+            user.setThirdUid(thirdUid);
+            return this;
+        }
+        
+        public Builder phone(String phone) {
+            user.setPhone(phone);
+            return this;
+        }
+        
+        public Builder email(String email) {
+            user.setEmail(email);
+            return this;
+        }
+        
+        public Builder nickName(String nickName) {
+            user.setNickName(nickName);
+            return this;
+        }
+        
+        public Builder bitState(Long bitState) {
+            user.setBitState(bitState);
+            return this;
+        }
+        
+        public Builder secLevel(Integer secLevel) {
+            user.setSecLevel(secLevel);
+            return this;
+        }
+        
+        public Builder loginId(Long loginId) {
+            user.setLoginId(loginId);
+            return this;
+        }
+        
+        public User build() {
+            return user;
+        }
     }
 }

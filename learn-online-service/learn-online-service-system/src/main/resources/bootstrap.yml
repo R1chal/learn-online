@@ -14,5 +14,6 @@ spring:
         file-extension: yaml #配置文件格式
         prefix: application-system #配置前缀 ，默认使用sring.application.name
         group: DEFAULT_GROUP
-        namespace: 8fa7d171-a928-405c-8797-01ed725d57e3
+        namespace: b721a427-4faf-4a98-b28c-856de268ea7f
+
 
