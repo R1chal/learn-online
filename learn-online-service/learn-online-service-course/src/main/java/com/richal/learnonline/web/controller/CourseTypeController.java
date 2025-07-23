@@ -65,4 +65,14 @@ public class CourseTypeController {
         page = courseTypeService.selectPage(page);
         return JSONResult.success(new PageList<CourseType>(page.getTotal(),page.getRecords()));
     }
+
+    /**
+     * 获取课程类型的树形结构数据
+     *
+     * @return 树形结构数据，包含课程数量
+     */
+    @RequestMapping(value = "/treeData", method = RequestMethod.GET)
+    public JSONResult treeData(){
+        return JSONResult.success(courseTypeService.getTreeDataWithCourseCount(0L, null));
+    }
 }
