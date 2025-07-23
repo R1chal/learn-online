@@ -3,6 +3,7 @@ package com.richal.learnonline.vo;
 import com.richal.learnonline.domain.CourseType;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,9 @@ import java.util.List;
  * @since 2025-07-22
  */
 @Data
-public class CourseTypeTreeVO {
+public class CourseTypeTreeVO implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     private Long id;
     private String name;
