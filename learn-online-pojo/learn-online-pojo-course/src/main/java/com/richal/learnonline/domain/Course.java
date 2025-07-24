@@ -21,6 +21,10 @@ public class Course extends Model<Course> {
 
     private static final long serialVersionUID = 1L;
 
+    public static final Integer OFFLINE = 0;
+
+    public static final Integer ONLINE = 1;
+
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**

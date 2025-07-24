@@ -1,5 +1,6 @@
 package com.richal.learnonline.web.controller;
 
+import com.richal.learnonline.dto.CourseSaveDto;
 import com.richal.learnonline.service.ICourseService;
 import com.richal.learnonline.domain.Course;
 import com.richal.learnonline.query.CourseQuery;
@@ -8,6 +9,8 @@ import com.richal.learnonline.result.PageList;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/course")
@@ -20,12 +23,8 @@ public class CourseController {
     * 保存和修改公用的
     */
     @RequestMapping(value="/save",method= RequestMethod.POST)
-    public JSONResult saveOrUpdate(@RequestBody Course course){
-        if(course.getId()!=null){
-            courseService.updateById(course);
-        }else{
-            courseService.insert(course);
-        }
+    public JSONResult saveOrUpdate(@RequestBody @Valid CourseSaveDto courseSaveDto){
+        courseService.save(courseSaveDto);
         return JSONResult.success();
     }
 
