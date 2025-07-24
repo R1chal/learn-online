@@ -38,4 +38,7 @@ build/
 .DS_Store
 
 # 忽略所有测试目录
-**/test/
+**/test/%
+
+# 敏感配置文件
+**/application-oss.yml

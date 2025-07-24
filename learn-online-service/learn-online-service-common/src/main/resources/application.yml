@@ -7,6 +7,12 @@ spring:
         server-addr: 127.0.0.1:8848
   application:
     name: service-common #服务名
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  profiles:
+    include: oss
   main:
     allow-bean-definition-overriding: true
   redis:
