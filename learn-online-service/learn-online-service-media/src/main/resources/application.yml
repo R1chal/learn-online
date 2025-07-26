@@ -1,0 +1,42 @@
+server:
+  port: 10070
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: service-media #服务名
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+  datasource:
+    url: jdbc:mysql:///learn-online-media?serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  main:
+    allow-bean-definition-overriding: true
+
+mybatis-plus:
+  mapper-locations: classpath:com/richal/learnonline/mapper/*Mapper.xml
+
+media:
+  upload-base-dir: "/Users/richal/Movies/Videos/" # 设置为Mac本地目录
+  #oad‐location: "/Users/richal/Movies/Videos/"  # 本地视频存储路径
+  ffmpeg‐path: "/usr/local/bin/ffmpeg" # Mac上ffmpeg的路径
+  rtmp: "rtmp://106.55.100.48:1935/live/" # 您的SRS服务器RTMP地址
+  play: "http://106.55.100.48:8080/live/" # 您的SRS服务器HTTP播放地址
+
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: "service-producer"
+    max-message-size: 4096
+    send-message-timeout: 3000
+    retry-times-when-send-failed: 2
+    retry-times-when-send-async-failed: 2
+
+

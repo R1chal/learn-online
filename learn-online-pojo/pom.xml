@@ -15,6 +15,7 @@
         <module>learn-online-pojo-system</module>
         <module>learn-online-pojo-uaa</module>
         <module>learn-online-pojo-user</module>
+        <module>learn-online-pojo-media</module>
     </modules>
 
     <properties>

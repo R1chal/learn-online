@@ -54,6 +54,14 @@ public class CourseChapterController {
     public JSONResult list(){
         return JSONResult.success(courseChapterService.selectList(null));
     }
+    
+    /**
+    * 根据课程ID查询章节
+    */
+    @RequestMapping(value = "/listByCourseId/{id}", method = RequestMethod.GET)
+    public JSONResult listByCourseId(@PathVariable("id") long id){
+        return JSONResult.success(courseChapterService.listByCourseId(id));
+    }
 
 
     /**

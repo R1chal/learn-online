@@ -1,10 +1,14 @@
 package com.richal.learnonline.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.richal.learnonline.domain.CourseChapter;
 import com.richal.learnonline.mapper.CourseChapterMapper;
 import com.richal.learnonline.service.ICourseChapterService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +21,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseChapterServiceImpl extends ServiceImpl<CourseChapterMapper, CourseChapter> implements ICourseChapterService {
 
+    @Override
+    public List<CourseChapter> listByCourseId(long courseId) {
+        Wrapper<CourseChapter> entityWrapper = new EntityWrapper<>();
+        entityWrapper.eq("course_id", courseId);
+        List<CourseChapter> courseChapters = selectList(entityWrapper);
+        return courseChapters;
+    }
 }

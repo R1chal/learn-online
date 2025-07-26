@@ -18,7 +18,7 @@ public class BaseQuery {
     private Integer page = 1;
 
     //每页显示多少条
-    private Integer rows = 10;
+    private Integer rows = 20;
 
     //排序的字段
     private String sortField;
