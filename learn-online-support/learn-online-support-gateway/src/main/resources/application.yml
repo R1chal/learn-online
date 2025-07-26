@@ -12,6 +12,13 @@ spring:
         locator:
           enabled: false #开放服务名访问方式
           lower-case-service-id: true #服务名小写
+      httpclient:
+        connect-timeout: 60000  # 60秒连接超时
+        response-timeout: 120s  # 120秒响应超时
+        pool:
+          max-connections: 200          # 最大连接数
+          max-idle-time: 60s            # 最大空闲时间
+          acquisition-timeout: 10000    # 获取连接超时
       routes: #路由配置
         - id : application-user #指定服务名
           uri: lb://service-user #去注册中心找这个服务名
