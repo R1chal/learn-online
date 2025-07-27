@@ -112,7 +112,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .build();
         userAccountService.insert(userAccount);
 
-        int i = 1 / 0;
         UserBaseInfo userBaseInfo = UserBaseInfo.builder()
                 .id(loginId)
                 .createTime(time)
