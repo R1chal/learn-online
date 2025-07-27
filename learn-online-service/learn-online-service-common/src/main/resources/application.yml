@@ -25,6 +25,28 @@ spring:
         max-wait: 2000ms
         min-idle: 2
         max-idle: 8
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/learn-online-common?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password:
+
+mybatis-plus:
+  mapper-locations: classpath:com/richal/learnonline/mapper/*Mapper.xml
+  type-aliases-package: com.richal.learnonline.domain
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+rocketmq:
+  name-server: 127.0.0.1:9877
+  producer:
+    group: "service-course-producer"
+    max-message-size: 4096
+    send-message-timeout: 3000
+    retry-times-when-send-failed: 2
+    retry-times-when-send-async-failed: 2
+
 
 
 

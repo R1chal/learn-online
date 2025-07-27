@@ -28,4 +28,16 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:com/richal/learnonline/mapper/*Mapper.xml
 
+rocketmq:
+  name-server: 127.0.0.1:9877
+  producer:
+    group: "service-course-producer"
+    max-message-size: 4096
+    send-message-timeout: 5000  # 进一步增加超时时间
+    retry-times-when-send-failed: 5  # 增加重试次数
+    retry-times-when-send-async-failed: 5
+    retry-next-server: true  # 启用重试其他nameserver
+    access-key: ""  # 添加空的access-key以避免某些版本的问题
+    secret-key: ""  # 添加空的secret-key以避免某些版本的问题
+
 

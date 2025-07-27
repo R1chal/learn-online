@@ -1,4 +1,4 @@
-package com.richal.learnonline.controller;
+package com.richal.learnonline.web.controller;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.richal.learnonline.result.JSONResult;

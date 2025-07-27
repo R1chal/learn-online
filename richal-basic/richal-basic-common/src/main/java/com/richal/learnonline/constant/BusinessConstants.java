@@ -26,4 +26,25 @@ public class BusinessConstants {
      * MQ_CONSUMERS_GROUP
      */
     public static final String ROCKETMQ_CONSUMERS_GROUP = "rocketmq_consumers_group";
+
+    /**
+     * ROCKETMQ_COURSE_TOPIC
+     */
+    public static final String ROCKETMQ_COURSE_TOPIC = "rocketmq_course_topic";
+
+    /**
+     * ROCKETMQ_COURSE_STATION_TAGS
+     */
+    public static final String ROCKETMQ_COURSE_STATION_TAGS = "rocketmq_course_station_tags";
+
+    /**
+     * ROCKETMQ_COURSE_SMS_TAGS
+     */
+    public static final String ROCKETMQ_COURSE_SMS_TAGS = "rocketmq_course_sms_tags";
+
+    /**
+     * ROCKETMQ_COURSE_EMAIL_TAGS
+     */
+    public static final String ROCKETMQ_COURSE_EMAIL_TAGS = "rocketmq_course_email_tags";
+
 }

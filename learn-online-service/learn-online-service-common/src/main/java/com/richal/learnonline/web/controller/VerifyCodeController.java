@@ -1,4 +1,4 @@
-package com.richal.learnonline.controller;
+package com.richal.learnonline.web.controller;
 
 import com.richal.learnonline.result.JSONResult;
 import com.richal.learnonline.service.VerifyCodeService;
