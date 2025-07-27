@@ -1,0 +1,24 @@
+server:
+  port: 10080
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: service-search #服务名
+  main:
+    allow-bean-definition-overriding: true
+  elasticsearch:
+    rest:
+      uris: http://localhost:9200
+    connection-timeout: 5000
+    socket-timeout: 30000
+
+logging:
+  level:
+    org.springframework.data.elasticsearch: DEBUG
+    org.elasticsearch.client: DEBUG
+    com.richal.learnonline: DEBUG
+
+

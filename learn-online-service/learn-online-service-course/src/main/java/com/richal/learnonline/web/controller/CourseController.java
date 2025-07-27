@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/course")
@@ -22,9 +22,9 @@ public class CourseController {
     /**
     * 保存和修改公用的
     */
-    @RequestMapping(value="/save",method= RequestMethod.POST)
-    public JSONResult saveOrUpdate(@RequestBody @Valid CourseSaveDto courseSaveDto){
-        courseService.save(courseSaveDto);
+    @RequestMapping(value = "/onLineCourse",method= RequestMethod.POST)
+    public JSONResult onlineCourse(@RequestBody List<Long> courseIds) {
+        courseService.onlineCourse(courseIds);
         return JSONResult.success();
     }
 

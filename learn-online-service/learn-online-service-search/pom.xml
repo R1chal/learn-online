@@ -5,24 +5,30 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.richal.learnonline</groupId>
-        <artifactId>learn-online</artifactId>
+        <artifactId>learn-online-service</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>learn-online-pojo</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>learn-online-pojo-system</module>
-        <module>learn-online-pojo-uaa</module>
-        <module>learn-online-pojo-user</module>
-        <module>learn-online-pojo-media</module>
-        <module>learn-online-pojo-search</module>
-    </modules>
+    <artifactId>learn-online-service-search</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.richal.learnonline</groupId>
+            <artifactId>learn-online-pojo-search</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.richal.learnonline</groupId>
+            <artifactId>learn-online-pojo-course</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>

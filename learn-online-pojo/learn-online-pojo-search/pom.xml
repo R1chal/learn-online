@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.richal.learnonline</groupId>
-        <artifactId>learn-online-service</artifactId>
+        <artifactId>learn-online-pojo</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>learn-online-service-course</artifactId>
+    <artifactId>learn-online-pojo-search</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.richal.learnonline</groupId>
-            <artifactId>learn-online-pojo-system</artifactId>
+            <artifactId>learn-online-pojo-search</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
@@ -31,27 +31,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.richal.learnonline</groupId>
-            <artifactId>learn-online-pojo-course</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.richal.learnonline</groupId>
-            <artifactId>learn-online-api-search</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.richal.learnonline</groupId>
-            <artifactId>learn-online-pojo-search</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
     </dependencies>
 

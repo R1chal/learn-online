@@ -18,6 +18,7 @@
         <module>learn-online-service-common</module>
         <module>learn-online-service-course</module>
         <module>learn-online-service-media</module>
+        <module>learn-online-service-search</module>
     </modules>
 
     <properties>

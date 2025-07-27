@@ -4,6 +4,8 @@ import com.richal.learnonline.domain.Course;
 import com.baomidou.mybatisplus.service.IService;
 import com.richal.learnonline.dto.CourseSaveDto;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -15,4 +17,6 @@ import com.richal.learnonline.dto.CourseSaveDto;
 public interface ICourseService extends IService<Course> {
 
     void save(CourseSaveDto courseSaveDto);
+
+    void onlineCourse(List<Long> courseIds);
 }
