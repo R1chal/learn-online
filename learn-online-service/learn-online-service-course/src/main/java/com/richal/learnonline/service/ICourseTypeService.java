@@ -2,6 +2,7 @@ package com.richal.learnonline.service;
 
 import com.richal.learnonline.domain.CourseType;
 import com.baomidou.mybatisplus.service.IService;
+import com.richal.learnonline.vo.CourseTypeCrumbVO;
 import com.richal.learnonline.vo.CourseTypeTreeVO;
 
 import java.util.List;
@@ -23,4 +24,7 @@ public interface ICourseTypeService extends IService<CourseType> {
      * @return 树形结构数据，包含课程数量
      */
     List<CourseTypeTreeVO> getTreeDataWithCourseCount(Long pid, String path);
+
+    List<CourseTypeCrumbVO> crumbs(Long courseTypeId);
+
 }

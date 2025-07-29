@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.richal.learnonline.constant.BusinessConstants;
 import com.richal.learnonline.domain.Course;
 import com.richal.learnonline.domain.CourseType;
+import com.richal.learnonline.exception.GlobleBusinessException;
 import com.richal.learnonline.mapper.CourseMapper;
 import com.richal.learnonline.mapper.CourseTypeMapper;
 import com.richal.learnonline.service.ICourseTypeService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.richal.learnonline.vo.CourseTypeCrumbVO;
 import com.richal.learnonline.vo.CourseTypeTreeVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 
@@ -58,6 +57,42 @@ public class CourseTypeServiceImpl extends ServiceImpl<CourseTypeMapper, CourseT
         log.info("从数据库获取数据:{}", courseTypeTreeVOS);
         redisTemplate.opsForValue().set(BusinessConstants.REDIS_COURSE_TYPE_TREE_DATA, courseTypeTreeVOS);
         return courseTypeTreeVOS;
+    }
+
+    @Override
+    public List<CourseTypeCrumbVO> crumbs(Long courseTypeId) {
+        // 判断参数
+        if(courseTypeId==null){
+            throw new GlobleBusinessException("参数异常");
+
+        }
+
+        // 根据id查询
+        CourseType courseType = selectById(courseTypeId);
+
+        if(courseType==null){
+            throw new GlobleBusinessException("参数异常");
+        }
+
+        // 获取path，
+        String[] idStrs = courseType.getPath().split("\\.");
+
+        List<CourseType> courseTypes = selectBatchIds(Arrays.asList(idStrs));
+
+        List<CourseTypeCrumbVO> courseTypeCrumbsVos = new ArrayList<>();
+
+        courseTypes.forEach(type -> {
+            EntityWrapper<CourseType> wrapper = new EntityWrapper<>();
+
+            wrapper.eq("pid",type.getPid());
+            wrapper.notIn("id",type.getId());
+            List<CourseType> others = selectList(wrapper);
+
+            courseTypeCrumbsVos.add(new CourseTypeCrumbVO(type,others));
+        });
+
+        return courseTypeCrumbsVos;
+
     }
 
     private List<CourseTypeTreeVO> getCourseTypeTreeVOS(Long pid, String path) {
