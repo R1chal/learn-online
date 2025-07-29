@@ -18,6 +18,7 @@
         <module>learn-online-pojo-media</module>
         <module>learn-online-pojo-search</module>
         <module>learn-online-pojo-common</module>
+        <module>learn-online-pojo-order</module>
     </modules>
 
     <properties>

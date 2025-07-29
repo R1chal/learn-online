@@ -47,4 +47,6 @@ public class BusinessConstants {
      */
     public static final String ROCKETMQ_COURSE_EMAIL_TAGS = "rocketmq_course_email_tags";
 
+
+    public static final String REDIS_PREVENT_REPEAT_SUBMIT_ORDER = "redis_prevent_repeat_submit_order";
 }

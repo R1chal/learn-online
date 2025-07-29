@@ -24,11 +24,11 @@ import java.util.*;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author whale.chen
- * @since 
+ * @since
  */
 @Service
 @Slf4j
@@ -38,7 +38,7 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
     private MediaFileMapper mediaFileMapper;
 
     @Autowired
-    private  IMediaFileService mediaFileService;
+    private IMediaFileService mediaFileService;
 
     /**
      * 配置
@@ -78,15 +78,15 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         File chunkfileFolder = new File(chunkfileFolderPath);
 
         //目录是否存在， 不存在就创建目录
-        if(!chunkfileFolder.exists()){
+        if (!chunkfileFolder.exists()) {
             chunkfileFolder.mkdirs();
         }
 
         //合并文件，创建新的文件对象
-        File mergeFile = new File(getFilePath(fileMd5,fileExt));
+        File mergeFile = new File(getFilePath(fileMd5, fileExt));
 
         // 合并文件存在先删除再创建
-        if(mergeFile.exists()){
+        if (mergeFile.exists()) {
             mergeFile.delete();
         }
 
@@ -95,11 +95,11 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         try {
             //创建文件
             newFile = mergeFile.createNewFile();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if(!newFile){
+        if (!newFile) {
             //创建失败
             return JSONResult.error("创建文件失败！");
         }
@@ -108,12 +108,12 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         List<File> chunkFiles = getChunkFiles(chunkfileFolder);
         //合并文件
         mergeFile = mergeFile(mergeFile, chunkFiles);
-        if(mergeFile == null){
+        if (mergeFile == null) {
             return JSONResult.error("合并文件失败！");
         }
         //校验文件
         boolean checkResult = this.checkFileMd5(mergeFile, fileMd5);
-        if(!checkResult){
+        if (!checkResult) {
             return JSONResult.error("文件校验失败！");
         }
         //将文件信息保存到数据库
@@ -121,11 +121,11 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         //MD5作为文件唯一ID
         mediaFile.setFileId(fileMd5);
         //文件名
-        mediaFile.setFileName(fileMd5+"."+fileExt);
+        mediaFile.setFileName(fileMd5 + "." + fileExt);
         //源文件名
         mediaFile.setFileOriginalName(fileName);
         //文件路径保存相对路径
-        mediaFile.setFilePath(getFileFolderRelativePath(fileMd5,fileExt));
+        mediaFile.setFilePath(getFileFolderRelativePath(fileMd5, fileExt));
         mediaFile.setFileSize(fileSize);
         mediaFile.setUploadTime(new Date());
         mediaFile.setMimeType(mimetype);
@@ -135,7 +135,7 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         mediaFile.setName(name);
         mediaFile.setCourseName(courseName);
         mediaFile.setChapterName(chapterName);
-        mediaFile.setFileUrl(srsPalyPath+mediaFile.getFileId()+".m3u8");
+        mediaFile.setFileUrl(srsPalyPath + mediaFile.getFileId() + ".m3u8");
         //状态为上传成功
         mediaFile.setFileStatus(1);
 
@@ -145,37 +145,39 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         wrapper.eq("chapter_id", courseChapterId);
         //某个课程下的某个章节下的视频数量
         Integer videoCount = mediaFileMapper.selectCount(wrapper);
-        mediaFile.setNumber(videoCount+1);
+        mediaFile.setNumber(videoCount + 1);
 
         mediaFileMapper.insert(mediaFile);
 
         Boolean send = mediaSenderService.send(mediaFile);
 
-        log.info("合并文件耗时 {}" ,System.currentTimeMillis() - startTime);
+        log.info("合并文件耗时 {}", System.currentTimeMillis() - startTime);
         return send ? JSONResult.success() : JSONResult.error();
     }
 
-     /** 文件推流 **/
+    /**
+     * 文件推流
+     **/
     public JSONResult handleFile2m3u8(MediaFile mediaFile) {
         String fileType = mediaFile.getFileType();
-        if(fileType == null ){
+        if (fileType == null) {
             return JSONResult.error("无效的扩展名");
         }
 
         //组装MP4文件名
-        String mp4_name = mediaFile.getFileId()+".mp4";
+        String mp4_name = mediaFile.getFileId() + ".mp4";
 
         //如果视频不是MP4需要进行格式转换
-        if(!fileType.equals("mp4")){
+        if (!fileType.equals("mp4")) {
             //生成mp4的文件路径
-            String video_path = uploadPath + mediaFile.getFilePath()+mediaFile.getFileName();
+            String video_path = uploadPath + mediaFile.getFilePath() + mediaFile.getFileName();
             //文件目录
             String mp4folder_path = uploadPath + mediaFile.getFilePath();
             //视频编码，生成mp4文件
-            Mp4VideoUtil videoUtil = new Mp4VideoUtil(ffmpeg_path,video_path,mp4_name,mp4folder_path);
+            Mp4VideoUtil videoUtil = new Mp4VideoUtil(ffmpeg_path, video_path, mp4_name, mp4folder_path);
             //生成MP4文件
             String result = videoUtil.generateMp4();
-            if(result == null || !result.equals("success")){
+            if (result == null || !result.equals("success")) {
                 //操作失败写入处理日志
                 mediaFile.setFileStatus(3);
                 mediaFileMapper.updateById(mediaFile);
@@ -188,15 +190,15 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         mediaFileMapper.updateById(mediaFile);
 
         //此地址为mp4的本地地址
-        String video_path = uploadPath + mediaFile.getFilePath()+mp4_name;
+        String video_path = uploadPath + mediaFile.getFilePath() + mp4_name;
 
         //初始化推流工具
         HlsVideoUtil hlsVideoUtil = new HlsVideoUtil(ffmpeg_path);
-        hlsVideoUtil.init(srsRtmpPath,video_path,mediaFile.getFileId());
+        hlsVideoUtil.init(srsRtmpPath, video_path, mediaFile.getFileId());
         //推流到云端
         String result = hlsVideoUtil.generateM3u8ToSrs();
 
-        if(result == null || !result.equals("success")){
+        if (result == null || !result.equals("success")) {
             //操作失败写入处理日志
             mediaFile.setFileStatus(3);
             //处理状态为处理失败
@@ -225,18 +227,23 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         return mediaFiles;
     }
 
+    @Override
+    public String getForUrl(Long mediaId) {
+        MediaFile mediaFile = mediaFileMapper.selectById(mediaId);
+        return mediaFile.getFileUrl();
+    }
 
     /*
      *根据文件md5得到文件路径
      */
-    private String getFilePath(String fileMd5 ,String fileExt) {
+    private String getFilePath(String fileMd5, String fileExt) {
         String filePath = uploadPath + fileMd5.substring(0, 1) + "/" + fileMd5.substring(1, 2) + "/" + fileMd5 + "/" + fileMd5 + "." + fileExt;
         return filePath;
     }
 
     //得到文件目录相对路径，路径中去掉根目录
-    private String getFileFolderRelativePath(String fileMd5 ,String fileExt) {
-        String filePath=fileMd5 .substring(0, 1) + "/" + fileMd5. substring(1, 2) + "/"+ fileMd5 + "/";
+    private String getFileFolderRelativePath(String fileMd5, String fileExt) {
+        String filePath = fileMd5.substring(0, 1) + "/" + fileMd5.substring(1, 2) + "/" + fileMd5 + "/";
         return filePath;
     }
 
@@ -247,14 +254,14 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
     }
 
     //创建文件目录
-    private boolean createFileFold(String fileMd5){
+    private boolean createFileFold(String fileMd5) {
         //创建上传文件目录
         String fileFolderPath = getFileFolderPath(fileMd5);
         File fileFolder = new File(fileFolderPath);
         if (!fileFolder.exists()) {
             //创建文件夹
             boolean mkdirs = fileFolder.mkdirs();
-            log.info("创建文件目录 {} ,结果 {}",fileFolder.getPath(),mkdirs);
+            log.info("创建文件目录 {} ,结果 {}", fileFolder.getPath(), mkdirs);
             return mkdirs;
         }
         return true;
@@ -273,14 +280,14 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         //2、查询数据库文件是否存在
         MediaFile media = mediaFileMapper.selectById(fileMd5);
         //文件存在直接返回
-        if(file.exists() && media!=null){
-            log.info("文件注册 {} ,文件已经存在",fileName);
+        if (file.exists() && media != null) {
+            log.info("文件注册 {} ,文件已经存在", fileName);
             return JSONResult.error("上传文件已存在");
         }
         boolean fileFold = createFileFold(fileMd5);
-        if(!fileFold){
+        if (!fileFold) {
             //上传文件目录创建失败
-            log.info("上传文件目录创建失败 {} ,文件已经存在",fileName);
+            log.info("上传文件目录创建失败 {} ,文件已经存在", fileName);
             return JSONResult.error("上传文件目录失败");
         }
         return JSONResult.success();
@@ -288,7 +295,7 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
 
     //得到块文件所在目录
     private String getChunkFileFolderPath(String fileMd5) {
-        String fileChunkFolderPath = getFileFolderPath(fileMd5) +"/" + "chunks" + "/";
+        String fileChunkFolderPath = getFileFolderPath(fileMd5) + "/" + "chunks" + "/";
         return fileChunkFolderPath;
     }
 
@@ -300,8 +307,8 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         //获取块文件文件夹路径
         String chunkfileFolderPath = getChunkFileFolderPath(fileMd5);
         //块文件的文件名称以1,2,3..序号命名，没有扩展名
-        File chunkFile = new File(chunkfileFolderPath+chunk);
-        if(!chunkFile.exists()){
+        File chunkFile = new File(chunkfileFolderPath + chunk);
+        if (!chunkFile.exists()) {
             return JSONResult.error();
         }
         return JSONResult.success();
@@ -310,7 +317,7 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
     /**
      * 创建块文件目录
      */
-    private boolean createChunkFileFolder(String fileMd5){ //创建上传文件目录
+    private boolean createChunkFileFolder(String fileMd5) { //创建上传文件目录
         String chunkFileFolderPath = getChunkFileFolderPath(fileMd5);
         File chunkFileFolder = new File(chunkFileFolderPath);
         if (!chunkFileFolder.exists()) {
@@ -326,7 +333,7 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
      */
     @Override
     public JSONResult uploadchunk(MultipartFile file, String fileMd5, Integer chunk) {
-        if(file == null){
+        if (file == null) {
             return JSONResult.error("上传文件不能为null");
         }
         //创建块文件目录
@@ -336,27 +343,24 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         File chunkfile = new File(getChunkFileFolderPath(fileMd5) + chunk);
 
         //上传的块文件
-        InputStream inputStream= null;
+        InputStream inputStream = null;
         FileOutputStream outputStream = null;
         try {
             inputStream = file.getInputStream();
             outputStream = new FileOutputStream(chunkfile);
-            IOUtils.copy(inputStream,outputStream); }
-        catch (Exception e){
+            IOUtils.copy(inputStream, outputStream);
+        } catch (Exception e) {
             e.printStackTrace();
             return JSONResult.error("文件上传失败！");
-        }finally {
+        } finally {
             try {
                 inputStream.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
                 outputStream.close();
-            } catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -365,9 +369,8 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
 
 
     //校验文件的md5值
-    private boolean checkFileMd5(File mergeFile,String md5) {
-        if(mergeFile == null || StringUtils.isEmpty(md5))
-        {
+    private boolean checkFileMd5(File mergeFile, String md5) {
+        if (mergeFile == null || StringUtils.isEmpty(md5)) {
             return false;
         }
         //进行md5校验
@@ -377,21 +380,16 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
             //得到文件的md5
             String mergeFileMd5 = DigestUtils.md5Hex(mergeFileInputstream);
             //比较md5
-            if(md5.equalsIgnoreCase(mergeFileMd5))
-            {
+            if (md5.equalsIgnoreCase(mergeFileMd5)) {
                 return true;
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
-        }
-        finally
-        {
+        } finally {
             try {
                 mergeFileInputstream.close();
-            } catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -407,8 +405,7 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         chunkFileList.addAll(Arrays.asList(chunkFiles));
         //排序
         Collections.sort(chunkFileList, (o1, o2) -> {
-            if(Integer.parseInt(o1.getName())>Integer.parseInt(o2.getName()))
-            {
+            if (Integer.parseInt(o1.getName()) > Integer.parseInt(o2.getName())) {
                 return 1;
             }
             return -1;

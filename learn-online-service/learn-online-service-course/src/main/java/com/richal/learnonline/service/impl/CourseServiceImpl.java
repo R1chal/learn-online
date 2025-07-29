@@ -25,12 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.print.attribute.standard.Media;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -211,6 +208,34 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         courseDetailVO.setCourseChapters(courseChapters);
         courseDetailVO.setTeachers(courseTeachers);
         return courseDetailVO;
+    }
+
+    @Override
+    public CourseInfoDTO info(String courseId) {
+        String[] split = courseId.split(",");
+        List<Course> courses = selectBatchIds(Arrays.asList(split));
+        List<CourseMarket> courseMarkets = courseMarketService.selectBatchIds(Arrays.asList(split));
+        List<CourseDTO> courseDTOS = new ArrayList<>();
+        
+        // 使用Map提高查询效率
+        Map<Long, Course> courseMap = courses.stream()
+            .collect(Collectors.toMap(Course::getId, course -> course));
+            
+        // 匹配课程并创建DTO
+        AtomicReference<BigDecimal> totalAmount = new AtomicReference<>(new BigDecimal(0));
+        
+        courseMarkets.forEach(courseMarket -> {
+            totalAmount.getAndUpdate(current -> current.add(courseMarket.getPrice()));
+            Course course = courseMap.get(courseMarket.getId());
+            if (course != null) {
+                courseDTOS.add(new CourseDTO(course, courseMarket));
+            }
+        });
+        
+        CourseInfoDTO courseInfoDTO = new CourseInfoDTO();
+        courseInfoDTO.setCoursesDTOs(courseDTOS);
+        courseInfoDTO.setTotalAmount(totalAmount.get());
+        return courseInfoDTO;
     }
 
     public void publishMessage(){

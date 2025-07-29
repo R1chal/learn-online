@@ -13,12 +13,12 @@ spring:
           enabled: false #开放服务名访问方式
           lower-case-service-id: true #服务名小写
       httpclient:
-        connect-timeout: 60000  # 60秒连接超时
-        response-timeout: 120s  # 120秒响应超时
+        connect-timeout: 120000  # 增加到120秒连接超时
+        response-timeout: 180s   # 增加到180秒响应超时
         pool:
-          max-connections: 200          # 最大连接数
-          max-idle-time: 60s            # 最大空闲时间
-          acquisition-timeout: 10000    # 获取连接超时
+          max-connections: 500          # 增加最大连接数
+          max-idle-time: 120s           # 增加最大空闲时间
+          acquisition-timeout: 30000    # 增加获取连接超时
       routes: #路由配置
         - id : application-user #指定服务名
           uri: lb://service-user #去注册中心找这个服务名
@@ -80,6 +80,15 @@ spring:
             - Path=/ymcc/common/**    #服务访问路径
           filters:
             - StripPrefix=2
+            - name: Retry
+              args:
+                retries: 3
+                statuses: INTERNAL_SERVER_ERROR,BAD_GATEWAY,SERVICE_UNAVAILABLE,GATEWAY_TIMEOUT
+                methods: GET,POST
+                backoff:
+                  firstBackoff: 500
+                  maxBackoff: 2000
+                  factor: 2
       globalcors: #跨域配置
         cors-configurations:
           '[/**]':

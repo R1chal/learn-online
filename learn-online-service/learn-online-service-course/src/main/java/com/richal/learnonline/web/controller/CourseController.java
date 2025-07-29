@@ -1,5 +1,6 @@
 package com.richal.learnonline.web.controller;
 
+import com.richal.learnonline.dto.CourseInfoDTO;
 import com.richal.learnonline.dto.CourseSaveDto;
 import com.richal.learnonline.service.ICourseService;
 import com.richal.learnonline.domain.Course;
@@ -69,5 +70,11 @@ public class CourseController {
     @GetMapping("/detail/data/{courseId}")
     public  JSONResult detail(@PathVariable("courseId") Long courseId){
         return JSONResult.success(courseService.detail(courseId));
+    }
+
+    @GetMapping("/info/{courseId}")
+    public JSONResult info(@PathVariable("courseId") String courseId){
+        CourseInfoDTO courseInfoDTO = courseService.info(courseId);
+        return JSONResult.success(courseInfoDTO);
     }
 }

@@ -19,6 +19,7 @@
         <module>learn-online-service-course</module>
         <module>learn-online-service-media</module>
         <module>learn-online-service-search</module>
+        <module>learn-online-service-order</module>
     </modules>
 
     <properties>

@@ -2,6 +2,7 @@ package com.richal.learnonline.service;
 
 import com.richal.learnonline.domain.Course;
 import com.baomidou.mybatisplus.service.IService;
+import com.richal.learnonline.dto.CourseInfoDTO;
 import com.richal.learnonline.dto.CourseSaveDto;
 import com.richal.learnonline.vo.CourseDetailVO;
 
@@ -22,4 +23,6 @@ public interface ICourseService extends IService<Course> {
     void onlineCourse(List<Long> courseIds);
 
     CourseDetailVO detail(Long courseId);
+
+    CourseInfoDTO info(String courseId);
 }

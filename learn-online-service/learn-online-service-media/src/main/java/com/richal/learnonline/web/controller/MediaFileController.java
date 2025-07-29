@@ -147,4 +147,10 @@ public class MediaFileController {
     public JSONResult selectMediaFileByCourseId(@PathVariable("courseId") Long courseId){
         return  JSONResult.success(mediaFileService.selectMediaFileByCourseId(courseId));
     }
+
+    @GetMapping("/getForUrl/{mediaId}")
+    public JSONResult getForUrl(@PathVariable("mediaId") Long mediaId){
+        String fileServiceForUrl = mediaFileService.getForUrl(mediaId);
+        return JSONResult.success(fileServiceForUrl);
+    }
 }

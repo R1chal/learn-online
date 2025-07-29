@@ -42,4 +42,6 @@ public interface IMediaFileService extends IService<MediaFile> {
     JSONResult handleFile2m3u8(MediaFile mediaFile);
 
     List<MediaFile> selectMediaFileByCourseId(Long courseId);
+
+    String getForUrl(Long mediaId);
 }
