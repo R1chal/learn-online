@@ -7,7 +7,12 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -17,6 +22,9 @@ import java.io.Serializable;
  * @author Richal
  * @since 2025-07-29
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("t_course_order")
 public class CourseOrder extends Model<CourseOrder> {
 
@@ -29,6 +37,9 @@ public class CourseOrder extends Model<CourseOrder> {
     public static final Integer ORDER_CANCEL = 2;
 
     public static final Integer PAID_FAIL = 3;
+
+    @TableField(exist = false)
+    private List<CourseOrderItem> courseOrderItems;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
@@ -84,113 +95,8 @@ public class CourseOrder extends Model<CourseOrder> {
     private Integer payType;
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public Integer getTotalCount() {
-        return totalCount;
-    }
-
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
-    }
-
-    public Integer getStatusOrder() {
-        return statusOrder;
-    }
-
-    public void setStatusOrder(Integer statusOrder) {
-        this.statusOrder = statusOrder;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public Integer getPayType() {
-        return payType;
-    }
-
-    public void setPayType(Integer payType) {
-        this.payType = payType;
-    }
-
     @Override
     protected Serializable pkVal() {
-        return this.id;
-    }
-
-    @Override
-    public String toString() {
-        return "CourseOrder{" +
-        ", id=" + id +
-        ", createTime=" + createTime +
-        ", updateTime=" + updateTime +
-        ", orderNo=" + orderNo +
-        ", totalAmount=" + totalAmount +
-        ", totalCount=" + totalCount +
-        ", statusOrder=" + statusOrder +
-        ", userId=" + userId +
-        ", title=" + title +
-        ", version=" + version +
-        ", payType=" + payType +
-        "}";
+        return null;
     }
 }

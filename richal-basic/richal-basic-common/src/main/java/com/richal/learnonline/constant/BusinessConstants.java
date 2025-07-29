@@ -49,4 +49,11 @@ public class BusinessConstants {
 
 
     public static final String REDIS_PREVENT_REPEAT_SUBMIT_ORDER = "redis_prevent_repeat_submit_order";
+
+    public static final String MQ_COURSEORDER_PAY_GROUP_TRANSACTION =  "mq_courseorder_pay_group_transaction";
+
+    public static final String MQ_TOPIC_ORDER =  "mq_topic_order";
+
+    public static final String MQ_TAGS_COURSEORDER_PAYORDER =  "mq_tags_courseorder_payorder";
+
 }

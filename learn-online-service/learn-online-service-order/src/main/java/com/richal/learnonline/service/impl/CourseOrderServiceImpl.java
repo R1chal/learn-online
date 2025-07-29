@@ -1,10 +1,14 @@
 package com.richal.learnonline.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.richal.learnonline.api.CourseFeignAPI;
 import com.richal.learnonline.constant.BusinessConstants;
 import com.richal.learnonline.domain.CourseOrder;
 import com.richal.learnonline.domain.CourseOrderItem;
+import com.richal.learnonline.domain.PayOrder;
 import com.richal.learnonline.dto.CourseDTO;
 import com.richal.learnonline.dto.CourseInfoDTO;
 import com.richal.learnonline.dto.PlaceOrderDTO;
@@ -16,10 +20,15 @@ import com.richal.learnonline.service.ICourseOrderService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.richal.learnonline.util.CodeGenerateUtils;
 import com.richal.learnonline.util.StrUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.rocketmq.client.producer.SendStatus;
+import org.apache.rocketmq.client.producer.TransactionSendResult;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.elasticsearch.common.Glob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -37,6 +46,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2025-07-29
  */
 @Service
+@Slf4j
 public class CourseOrderServiceImpl extends ServiceImpl<CourseOrderMapper, CourseOrder> implements ICourseOrderService {
 
     @Autowired
@@ -47,6 +57,9 @@ public class CourseOrderServiceImpl extends ServiceImpl<CourseOrderMapper, Cours
 
     @Autowired
     private ICourseOrderItemService courseOrderItemService;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     @Override
     public String placeOrder(PlaceOrderDTO placeOrderDTO) {
@@ -87,7 +100,7 @@ public class CourseOrderServiceImpl extends ServiceImpl<CourseOrderMapper, Cours
         courseOrder.setUserId(loginId);
         courseOrder.setTitle(coursesDTOs.get(0).getCourse().getName());
 
-        insert(courseOrder);
+        //insert(courseOrder);
 
         List<CourseOrderItem> courseOrderItems = new ArrayList<>();
         coursesDTOs.forEach(course -> {
@@ -103,8 +116,51 @@ public class CourseOrderServiceImpl extends ServiceImpl<CourseOrderMapper, Cours
             courseOrderItem.setOrderId(courseOrder.getId());
             courseOrderItems.add(courseOrderItem);
         });
-        courseOrderItemService.insertBatch(courseOrderItems);
+
+        courseOrder.setCourseOrderItems(courseOrderItems);
+       // courseOrderItemService.insertBatch(courseOrderItems);
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setUpdateTime(date);
+        payOrder.setCreateTime(date);
+        payOrder.setAmount(totalAmount);
+        payOrder.setPayType(payType);
+        payOrder.setOrderNo(orderNO);
+        payOrder.setUserId(loginId);
+        payOrder.setSubject(coursesDTOs.get(0).getCourse().getName());
+        payOrder.setPayStatus(PayOrder.NO_PAY);
+
+        //消息内容到底应该长成什么样子？
+        TransactionSendResult transactionSendResult = rocketMQTemplate.sendMessageInTransaction(
+                //主题：标签
+                BusinessConstants.MQ_TOPIC_ORDER + ":" + BusinessConstants.MQ_TAGS_COURSEORDER_PAYORDER,
+                //消息：用作保存支付单
+                MessageBuilder.withPayload(JSONObject.toJSONString(payOrder)).build(),
+                //参数：用作保存课程订单和明细
+                courseOrder);
+        log.info("事务消息发送结果：{}", transactionSendResult.getSendStatus());
+
+        SendStatus sendStatus = transactionSendResult.getSendStatus();
+        if (sendStatus != SendStatus.SEND_OK){
+            throw new GlobleBusinessException("分布式事务失败");
+        }
         redisTemplate.delete(key);
         return orderNO;
+    }
+
+    @Override
+    public void saveOrderAndItem(CourseOrder courseOrder) {
+        Wrapper<CourseOrder> ww = new EntityWrapper<CourseOrder>();
+        ww.eq("order_no", courseOrder.getOrderNo());
+        CourseOrder courseOrderDB = selectOne(ww);
+        if (courseOrderDB != null) {
+            throw new GlobleBusinessException("请勿重复提交");
+        }
+        insert(courseOrder);
+        List<CourseOrderItem> courseOrderItems = courseOrder.getCourseOrderItems();
+        for (CourseOrderItem item : courseOrderItems) {
+            item.setOrderId(courseOrder.getId());
+        }
+        courseOrderItemService.insertBatch(courseOrderItems);
     }
 }

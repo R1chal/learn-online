@@ -20,6 +20,7 @@
         <module>learn-online-service-media</module>
         <module>learn-online-service-search</module>
         <module>learn-online-service-order</module>
+        <module>learn-online-service-pay</module>
     </modules>
 
     <properties>

@@ -19,6 +19,7 @@
         <module>learn-online-pojo-search</module>
         <module>learn-online-pojo-common</module>
         <module>learn-online-pojo-order</module>
+        <module>learn-online-pojo-pay</module>
     </modules>
 
     <properties>

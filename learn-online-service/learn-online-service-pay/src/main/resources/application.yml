@@ -1,18 +1,18 @@
 server:
-  port: 10090
+  port: 10100
 spring:
   cloud:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
   application:
-    name: service-order #服务名
+    name: service-pay #服务名
   servlet:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
   datasource:
-    url: jdbc:mysql:///learn-online-order?serverTimezone=UTC
+    url: jdbc:mysql:///learn-online-pay?serverTimezone=UTC
     username: root
     password:
     driver-class-name: com.mysql.jdbc.Driver
@@ -28,13 +28,13 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:com/richal/learnonline/mapper/*Mapper.xml
 
+
 rocketmq:
   name-server: 127.0.0.1:9877
   producer:
-    group: "service-order-producer"
+    group: "service-pay-producer"
     max-message-size: 4096
     send-message-timeout: 3000
     retry-times-when-send-failed: 2
     retry-times-when-send-async-failed: 2
-
 

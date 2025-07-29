@@ -15,4 +15,6 @@ import com.richal.learnonline.dto.PlaceOrderDTO;
 public interface ICourseOrderService extends IService<CourseOrder> {
 
     String placeOrder(PlaceOrderDTO placeOrderDTO);
+
+    void saveOrderAndItem(CourseOrder courseOrder);
 }
