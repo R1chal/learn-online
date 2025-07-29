@@ -2,6 +2,9 @@ package com.richal.learnonline.mapper;
 
 import com.richal.learnonline.domain.CourseTeacher;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.richal.learnonline.domain.Teacher;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface CourseTeacherMapper extends BaseMapper<CourseTeacher> {
 
+    List<Teacher> selectTeachersByCourseId(Long courseId);
 }

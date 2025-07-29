@@ -65,6 +65,12 @@
             <artifactId>learn-online-pojo-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.richal.learnonline</groupId>
+            <artifactId>learn-online-api-media</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

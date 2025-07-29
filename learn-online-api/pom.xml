@@ -15,6 +15,7 @@
         <module>learn-online-api-system</module>
         <module>learn-online-api-uaa</module>
         <module>learn-online-api-search</module>
+        <module>learn-online-api-media</module>
     </modules>
 
     <properties>

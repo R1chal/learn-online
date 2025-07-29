@@ -142,4 +142,9 @@ public class MediaFileController {
         page = mediaFileService.selectPage(page);
         return JSONResult.success(new PageList<MediaFile>(page.getTotal(),page.getRecords()));
     }
+
+    @GetMapping("/selectMediaFileByCourseId/{courseId}")
+    public JSONResult selectMediaFileByCourseId(@PathVariable("courseId") Long courseId){
+        return  JSONResult.success(mediaFileService.selectMediaFileByCourseId(courseId));
+    }
 }

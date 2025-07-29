@@ -1,7 +1,10 @@
 package com.richal.learnonline.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.richal.learnonline.SearchFeignAPI;
+import com.richal.learnonline.api.MediaFeignAPI;
 import com.richal.learnonline.constant.BusinessConstants;
 import com.richal.learnonline.doc.CourseDoc;
 import com.richal.learnonline.domain.*;
@@ -11,6 +14,7 @@ import com.richal.learnonline.mapper.CourseMapper;
 import com.richal.learnonline.result.JSONResult;
 import com.richal.learnonline.service.*;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.richal.learnonline.vo.CourseDetailVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -21,12 +25,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.print.attribute.standard.Media;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * 课程服务实现类
@@ -61,6 +66,12 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+
+    @Autowired
+    private ICourseChapterService courseChapterService;
+
+    @Autowired
+    private MediaFeignAPI mediaFeignAPI;
 
     @Override
     @Transactional
@@ -169,6 +180,37 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
             e.printStackTrace();
             // 异常不会影响课程状态更新，课程仍然会上线
         }
+    }
+
+    @Override
+    public CourseDetailVO detail(Long courseId) {
+        Course course = selectById(courseId);
+        CourseMarket courseMarket = courseMarketService.selectById(courseId);
+        CourseSummary courseSummary = courseSummaryService.selectById(courseId);
+        CourseDetail courseDetail = courseDetailService.selectById(courseId);
+        List<Teacher> courseTeachers = courseTeacherService.selectTeacherById(courseId);
+        Wrapper<CourseChapter> ww = new EntityWrapper<>();
+        ww.eq("course_id", courseId);
+        List<CourseChapter> courseChapters = courseChapterService.selectList(ww);
+        JSONResult jsonResult = mediaFeignAPI.selectMediaFileByCourseId(courseId);
+        Object data = jsonResult.getData();
+        String jsonString = JSONObject.toJSONString(data);
+        List<MediaFile> mediaFiles = JSONObject.parseArray(jsonString, MediaFile.class);
+        mediaFiles.forEach(mediaFile -> {
+            courseChapters.forEach(courseChapter -> {
+                if(mediaFile.getChapterId().longValue() == courseChapter.getId().longValue()) {
+                    courseChapter.getMediaFiles().add(mediaFile);
+                }
+            });
+        });
+        CourseDetailVO courseDetailVO = new CourseDetailVO();
+        courseDetailVO.setCourseDetail(courseDetail);
+        courseDetailVO.setCourseSummary(courseSummary);
+        courseDetailVO.setCourse(course);
+        courseDetailVO.setCourseMarket(courseMarket);
+        courseDetailVO.setCourseChapters(courseChapters);
+        courseDetailVO.setTeachers(courseTeachers);
+        return courseDetailVO;
     }
 
     public void publishMessage(){

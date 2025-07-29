@@ -64,4 +64,10 @@ public class CourseController {
         page = courseService.selectPage(page);
         return JSONResult.success(new PageList<Course>(page.getTotal(),page.getRecords()));
     }
+
+
+    @GetMapping("/detail/data/{courseId}")
+    public  JSONResult detail(@PathVariable("courseId") Long courseId){
+        return JSONResult.success(courseService.detail(courseId));
+    }
 }

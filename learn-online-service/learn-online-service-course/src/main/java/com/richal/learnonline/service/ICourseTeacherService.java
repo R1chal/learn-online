@@ -2,6 +2,9 @@ package com.richal.learnonline.service;
 
 import com.richal.learnonline.domain.CourseTeacher;
 import com.baomidou.mybatisplus.service.IService;
+import com.richal.learnonline.domain.Teacher;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface ICourseTeacherService extends IService<CourseTeacher> {
 
+    List<Teacher> selectTeacherById(Long courseId);
 }

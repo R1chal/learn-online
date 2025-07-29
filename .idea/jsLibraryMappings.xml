@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <excludedPredefinedLibrary name="learn-online/ymcc-ui-course/node_modules" />
+    <excludedPredefinedLibrary name="learn-online/ymcc-ui-system/node_modules" />
+  </component>
+</project>

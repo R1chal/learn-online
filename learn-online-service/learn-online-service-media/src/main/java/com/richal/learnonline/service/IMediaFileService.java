@@ -5,6 +5,8 @@ import com.richal.learnonline.result.JSONResult;
 import com.baomidou.mybatisplus.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -38,4 +40,6 @@ public interface IMediaFileService extends IService<MediaFile> {
 
     //处理文件
     JSONResult handleFile2m3u8(MediaFile mediaFile);
+
+    List<MediaFile> selectMediaFileByCourseId(Long courseId);
 }

@@ -5,12 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.richal.learnonline</groupId>
-        <artifactId>learn-online</artifactId>
+        <artifactId>learn-online-api</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>learn-online-pojo-course</artifactId>
+    <artifactId>learn-online-api-media</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -20,27 +19,24 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>2.2.0</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.richal.learnonline</groupId>
             <artifactId>richal-basic-common</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>com.richal.learnonline</groupId>
             <artifactId>learn-online-pojo-media</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
+
 
 </project>

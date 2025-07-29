@@ -217,6 +217,13 @@ public class MediaFileServiceImpl extends ServiceImpl<MediaFileMapper, MediaFile
         return JSONResult.success();
     }
 
+    @Override
+    public List<MediaFile> selectMediaFileByCourseId(Long courseId) {
+        Wrapper<MediaFile> ww = new EntityWrapper<>();
+        ww.eq("course_id", courseId);
+        List<MediaFile> mediaFiles = selectList(ww);
+        return mediaFiles;
+    }
 
 
     /*
