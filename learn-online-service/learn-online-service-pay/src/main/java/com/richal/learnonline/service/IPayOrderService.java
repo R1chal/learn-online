@@ -37,4 +37,6 @@ public interface IPayOrderService extends IService<PayOrder> {
     String asyncNotify(AlipayNotifyDto alipayNotifyDto);
 
     void cancel(String payOrder);
+
+    String queryOrderStatus(String orderNo);
 }

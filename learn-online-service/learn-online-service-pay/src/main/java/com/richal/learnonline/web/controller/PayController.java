@@ -56,4 +56,14 @@ public class PayController {
         return "fail";
     }
 
+    /**
+     * 根据订单号查询订单状态
+     *
+     */
+    @GetMapping("/queryOrderStatus/{orderNo}")
+    public JSONResult queryOrderStatus(@PathVariable("orderNo") String orderNo) {
+        String s = payOrderService.queryOrderStatus(orderNo);
+        return JSONResult.success(s);
+    }
+
 } 

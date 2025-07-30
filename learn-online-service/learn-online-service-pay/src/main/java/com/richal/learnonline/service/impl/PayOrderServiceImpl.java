@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alipay.easysdk.factory.Factory;
 import com.alipay.easysdk.kernel.Config;
 import com.alipay.easysdk.kernel.util.ResponseChecker;
+import com.alipay.easysdk.payment.common.models.AlipayTradeQueryResponse;
 import com.alipay.easysdk.payment.page.models.AlipayTradePagePayResponse;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -177,6 +178,16 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
         } catch (Exception e) {
             log.error("关单失败，订单号:{}，错误信息:{}", orderNo, e.getMessage(), e);
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String queryOrderStatus(String orderNo) {
+        try {
+            AlipayTradeQueryResponse query = Factory.Payment.Common().query(orderNo);
+            return query.getBody();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
