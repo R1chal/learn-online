@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.richal.learnonline.domain.KillActivity;
 import com.richal.learnonline.domain.KillCourse;
 import com.richal.learnonline.dto.KillActivityDTO;
+import com.richal.learnonline.exception.GlobleBusinessException;
 import com.richal.learnonline.mapper.KillActivityMapper;
 import com.richal.learnonline.service.IKillActivityService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -51,14 +52,16 @@ public class KillActivityServiceImpl extends ServiceImpl<KillActivityMapper, Kil
 
     @Override
     public void publish(Long id) {
+        Wrapper<KillCourse> ww = new EntityWrapper();
+        ww.eq("activity_id", id);
+        List<KillCourse> killCourses = killCourseService.selectList(ww);
+        if(killCourses.isEmpty()){
+            throw new GlobleBusinessException("未关联课程");
+        }
 
         KillActivity killActivity = selectById(id);
         killActivity.setPublishStatus(KillActivity.PUBLISH_STATUS_OK);
         updateById(killActivity);
-
-        Wrapper<KillCourse> ww = new EntityWrapper();
-        ww.eq("activity_id", id);
-        List<KillCourse> killCourses = killCourseService.selectList(ww);
 
         killCourses.forEach(killCourse -> {
             killCourse.setPublishStatus(KillActivity.PUBLISH_STATUS_OK);

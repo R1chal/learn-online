@@ -10,9 +10,10 @@ import com.richal.learnonline.service.IKillActivityService;
 import com.richal.learnonline.service.IKillCourseService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * <p>
@@ -29,8 +30,15 @@ public class KillCourseServiceImpl extends ServiceImpl<KillCourseMapper, KillCou
     @Autowired
     private IKillActivityService killActivityService;
 
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
+
     @Override
     public void save(KillCourse killCourse) {
+        KillActivity killActivityDB = killActivityService.selectById(killCourse.getActivityId());
+        if(killActivityDB.getPublishStatus().equals(KillActivity.PUBLISH_STATUS_OK)) {
+            throw new GlobleBusinessException("活动正在进行，稍后再试");
+        }
 
         //校验
         Wrapper<KillCourse> ww = new EntityWrapper<>();
@@ -53,5 +61,16 @@ public class KillCourseServiceImpl extends ServiceImpl<KillCourseMapper, KillCou
         killCourse.setTimeStr(killActivity.getTimeStr());
         
         insert(killCourse);
+    }
+
+    @Override
+    public List<KillCourse> queryOnlineALL(KillCourse killCourse) {
+        Set<Object> keys = redisTemplate.keys("activity:*");
+        List<KillCourse> killCourses = new ArrayList<>();
+        keys.forEach(key -> {
+            List values = redisTemplate.opsForHash().values(key);
+            killCourses.addAll(values);
+        });
+        return  killCourses;
     }
 }
