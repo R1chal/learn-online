@@ -2,6 +2,7 @@ package com.richal.learnonline.web.controller;
 
 import com.richal.learnonline.dto.CourseDTO;
 import com.richal.learnonline.dto.PlaceOrderDTO;
+import com.richal.learnonline.dto.UpdateOrderStatusDTO;
 import com.richal.learnonline.service.ICourseOrderService;
 import com.richal.learnonline.domain.CourseOrder;
 import com.richal.learnonline.query.CourseOrderQuery;
@@ -72,5 +73,12 @@ public class CourseOrderController {
     public JSONResult placeOrder(@RequestBody PlaceOrderDTO placeOrderDTO){
         String order = courseOrderService.placeOrder(placeOrderDTO);
         return JSONResult.success(order);
+    }
+
+    @PostMapping("/updateOrderStatus")
+    public JSONResult updateOrderStatus(@RequestBody UpdateOrderStatusDTO updateOrderStatusDTO){
+        courseOrderService.updateOrderStatus(updateOrderStatusDTO);
+        return JSONResult.success();
+
     }
 }

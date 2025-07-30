@@ -1,6 +1,7 @@
 package com.richal.learnonline.web.controller;
 
 import com.richal.learnonline.domain.PayOrder;
+import com.richal.learnonline.dto.AlipayNotifyDto;
 import com.richal.learnonline.dto.ApplyDto;
 import com.richal.learnonline.result.JSONResult;
 import com.richal.learnonline.service.IPayOrderService;
@@ -46,9 +47,13 @@ public class PayController {
      * 异步回调函数
      */
     @PostMapping("/notifyPay")
-    public String asyncNotify(){
-        log.info("异步通知已接收到=============================================");
-        return "success";
+    public String asyncNotify(AlipayNotifyDto  notifyDto) {
+        try {
+            return payOrderService.asyncNotify(notifyDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "fail";
     }
 
 } 

@@ -16,5 +16,10 @@
         <result column="version" property="version" />
         <result column="pay_type" property="payType" />
     </resultMap>
+    <update id="updateOrderStatus">
+        UPDATE t_course_order
+        SET status_order=#{statusOrder},update_time={updateTime}
+        WHERE order_no=#{orderNo}
+    </update>
 
 </mapper>

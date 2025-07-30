@@ -17,4 +17,10 @@
         <result column="pay_status" property="payStatus" />
     </resultMap>
 
+    <update id="updateStatusByOrderNo">
+        UPDATE t_pay_order
+        SET pay_status = #{payStatus}, update_time = #{date}
+        WHERE order_no = #{outTradeNo}
+    </update>
+
 </mapper>
