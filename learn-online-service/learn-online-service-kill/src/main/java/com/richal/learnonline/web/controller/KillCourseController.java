@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/killCourse")
 public class KillCourseController {
@@ -60,5 +62,11 @@ public class KillCourseController {
         Page<KillCourse> page = new Page<KillCourse>(query.getPage(),query.getRows());
         page = killCourseService.selectPage(page);
         return JSONResult.success(new PageList<KillCourse>(page.getTotal(),page.getRecords()));
+    }
+
+    @GetMapping("/online/all")
+    public JSONResult queryOnlineALL(){
+        List<KillCourse> killCourses = killCourseService.queryOnlineALL();
+        return JSONResult.success(killCourses);
     }
 }

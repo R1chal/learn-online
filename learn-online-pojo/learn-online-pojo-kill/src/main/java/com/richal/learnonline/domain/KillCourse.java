@@ -261,4 +261,16 @@ public class KillCourse extends Model<KillCourse> {
         ", timeStr=" + timeStr +
         "}";
     }
+
+    public String getKillStatusName(){
+        Date date = new Date();
+        if(date.before(new Date(startTime))){
+            return "未开始";
+        }else if(date.after(new Date(endTime)) && date.before(new Date(startTime))){
+            return "进行中";
+        }else if(date.after(new Date(endTime))){
+            return "已结束";
+        }
+        return null;
+    }
 }
