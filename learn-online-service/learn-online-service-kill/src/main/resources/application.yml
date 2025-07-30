@@ -1,0 +1,33 @@
+server:
+  port: 10120
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: service-kill #服务名
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  datasource:
+    url: jdbc:mysql:///learn-online-kill?serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  main:
+    allow-bean-definition-overriding: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: lzc064212  # 添加Redis密码，请使用您的实际密码
+    database: 0
+    timeout: 5000ms
+mybatis-plus:
+  mapper-locations: classpath:com/richal/learnonline/mapper/*Mapper.xml
+
+
+
+

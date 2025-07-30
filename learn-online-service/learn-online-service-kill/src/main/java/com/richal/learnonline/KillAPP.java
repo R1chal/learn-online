@@ -1,13 +1,11 @@
 package com.richal.learnonline;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.richal.learnonline.mapper")
-public class MediaAPP {
+public class KillAPP {
     public static void main(String[] args) {
-        SpringApplication.run(MediaAPP.class, args);
+        SpringApplication.run(KillAPP.class, args);
     }
 }

@@ -29,8 +29,8 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("媒体服务")
-                .description("媒体服务接口文档说明")
+                .title("秒杀服务")
+                .description("秒杀服务接口文档说明")
                 .contact(new Contact("Richal Lee", "", "lirichal3@gmail.com"))
                 .version("1.0")
                 .build();

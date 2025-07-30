@@ -21,6 +21,7 @@
         <module>learn-online-service-search</module>
         <module>learn-online-service-order</module>
         <module>learn-online-service-pay</module>
+        <module>learn-online-service-kill</module>
     </modules>
 
     <properties>

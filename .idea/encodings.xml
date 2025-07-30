@@ -20,6 +20,7 @@
     <file url="file://$PROJECT_DIR$/learn-online-basic/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/learn-online-pojo/learn-online-pojo-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/learn-online-pojo/learn-online-pojo-course/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/learn-online-pojo/learn-online-pojo-kill/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/learn-online-pojo/learn-online-pojo-media/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/learn-online-pojo/learn-online-pojo-order/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/learn-online-pojo/learn-online-pojo-pay/src/main/java" charset="UTF-8" />
@@ -34,6 +35,7 @@
     <file url="file://$PROJECT_DIR$/learn-online-pojo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/learn-online-service/learn-online-service-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/learn-online-service/learn-online-service-course/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/learn-online-service/learn-online-service-kill/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/learn-online-service/learn-online-service-media/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/learn-online-service/learn-online-service-order/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/learn-online-service/learn-online-service-pay/src/main/java" charset="UTF-8" />
