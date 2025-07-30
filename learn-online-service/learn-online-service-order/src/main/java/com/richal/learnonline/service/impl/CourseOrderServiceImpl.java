@@ -12,6 +12,7 @@ import com.richal.learnonline.domain.PayOrder;
 import com.richal.learnonline.dto.CourseDTO;
 import com.richal.learnonline.dto.CourseInfoDTO;
 import com.richal.learnonline.dto.PlaceOrderDTO;
+import com.richal.learnonline.dto.UpdateOrderStatusDTO;
 import com.richal.learnonline.exception.GlobleBusinessException;
 import com.richal.learnonline.mapper.CourseOrderMapper;
 import com.richal.learnonline.result.JSONResult;
@@ -22,6 +23,7 @@ import com.richal.learnonline.util.CodeGenerateUtils;
 import com.richal.learnonline.util.StrUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.client.producer.TransactionSendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -60,6 +62,9 @@ public class CourseOrderServiceImpl extends ServiceImpl<CourseOrderMapper, Cours
 
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+
+    @Autowired
+    private CourseOrderMapper courseOrderMapper;
 
     @Override
     public String placeOrder(PlaceOrderDTO placeOrderDTO) {
@@ -144,6 +149,19 @@ public class CourseOrderServiceImpl extends ServiceImpl<CourseOrderMapper, Cours
         if (sendStatus != SendStatus.SEND_OK){
             throw new GlobleBusinessException("分布式事务失败");
         }
+
+        //处理超时订单
+        SendResult result = rocketMQTemplate.syncSend(BusinessConstants.ROCKET_MQ_LEAVE_TIMEOUT_TOPIC +
+                        ":" + BusinessConstants.ROCKET_MQ_LEAVE_TIMEOUT_TAGS,
+                MessageBuilder.withPayload(orderNO).build(),
+                3000,
+                4);
+
+        log.info("发送结果：{}",result);
+        if (!result.getSendStatus().equals(SendStatus.SEND_OK)){
+            log.error("发送延时消息失败:{}",result.getSendStatus());
+        }
+
         redisTemplate.delete(key);
         return orderNO;
     }
@@ -163,4 +181,11 @@ public class CourseOrderServiceImpl extends ServiceImpl<CourseOrderMapper, Cours
         }
         courseOrderItemService.insertBatch(courseOrderItems);
     }
+
+    @Override
+    public void updateOrderStatus(UpdateOrderStatusDTO updateOrderStatusDTO) {
+        courseOrderMapper.updateOrderStatus(updateOrderStatusDTO);
+    }
+
+
 }

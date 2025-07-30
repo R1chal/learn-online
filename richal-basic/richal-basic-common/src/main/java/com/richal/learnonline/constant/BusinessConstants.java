@@ -56,4 +56,14 @@ public class BusinessConstants {
 
     public static final String MQ_TAGS_COURSEORDER_PAYORDER =  "mq_tags_courseorder_payorder";
 
+    public static final Integer PAY_CLOSED = 2;
+
+    public static final Integer PAY_OK = 1;
+
+    public static final Integer PAY_DEFAULT = 0;
+
+    public static final String ROCKET_MQ_LEAVE_TIMEOUT_TOPIC = "rocket_mq_leave_timeout_topic";
+
+    public static final String ROCKET_MQ_LEAVE_TIMEOUT_TAGS = "rocketmq_leave_timeout_tags";
+
 }
