@@ -10,6 +10,10 @@ import com.richal.learnonline.mapper.KillActivityMapper;
 import com.richal.learnonline.service.IKillActivityService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.richal.learnonline.service.IKillCourseService;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.Redisson;
+import org.redisson.api.RSemaphore;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,7 @@ import java.util.List;
  * @since 2025-07-30
  */
 @Service
+@Slf4j
 public class KillActivityServiceImpl extends ServiceImpl<KillActivityMapper, KillActivity> implements IKillActivityService {
 
 
@@ -35,6 +40,9 @@ public class KillActivityServiceImpl extends ServiceImpl<KillActivityMapper, Kil
 
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     @Override
     public void saveActivity(KillActivityDTO killActivityDTO) {
@@ -64,14 +72,18 @@ public class KillActivityServiceImpl extends ServiceImpl<KillActivityMapper, Kil
         updateById(killActivity);
 
         killCourses.forEach(killCourse -> {
-            killCourse.setPublishStatus(KillActivity.PUBLISH_STATUS_OK);
-            killCourse.setPublishTime(new Date());
-            killCourseService.updateById(killCourse);
-
             String key = "activity_" + id;
-            redisTemplate.opsForHash().put(key, "course:" + killCourse.getCourseId(), killCourse);
             redisTemplate.opsForValue().set("course:" + killCourse.getCourseId(), killCourse.getKillCount());
+            RSemaphore semaphore = redissonClient.getSemaphore(key + ":" + killCourse.getCourseId());
+            boolean trySetPermitsResult = semaphore.trySetPermits(killCourse.getKillCount());
+            if(trySetPermitsResult){
+                killCourse.setPublishStatus(KillActivity.PUBLISH_STATUS_OK);
+                killCourse.setPublishTime(new Date());
+                killCourseService.updateById(killCourse);
+                redisTemplate.opsForHash().put(key, "course:" + killCourse.getCourseId(), killCourse);
+            }else {
+                log.error("秒杀发布失败:{}", killCourse.getCourseId());
+            }
         });
-
     }
 }

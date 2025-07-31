@@ -1,5 +1,6 @@
 package com.richal.learnonline.web.controller;
 
+import com.richal.learnonline.dto.KillCourseDTO;
 import com.richal.learnonline.service.IKillCourseService;
 import com.richal.learnonline.domain.KillCourse;
 import com.richal.learnonline.query.KillCourseQuery;
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -74,5 +76,11 @@ public class KillCourseController {
     public JSONResult queryOnlineOne(@PathVariable("activityId") Long activityId,@PathVariable("courseId") Long courseId){
         KillCourse killCourse = killCourseService.queryOnlineOne(activityId, courseId);
         return JSONResult.success(killCourse);
+    }
+
+    @PostMapping("/kill")
+    public JSONResult kill(@RequestBody @Valid KillCourseDTO killCourseDTO){
+        String orderNo = killCourseService.kill(killCourseDTO);
+        return JSONResult.success(orderNo);
     }
 }

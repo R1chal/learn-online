@@ -4,11 +4,16 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.richal.learnonline.domain.KillActivity;
 import com.richal.learnonline.domain.KillCourse;
+import com.richal.learnonline.dto.KillCourseDTO;
+import com.richal.learnonline.dto.RedisOrderDTO;
 import com.richal.learnonline.exception.GlobleBusinessException;
 import com.richal.learnonline.mapper.KillCourseMapper;
 import com.richal.learnonline.service.IKillActivityService;
 import com.richal.learnonline.service.IKillCourseService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.richal.learnonline.util.CodeGenerateUtils;
+import org.redisson.api.RSemaphore;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -32,6 +37,9 @@ public class KillCourseServiceImpl extends ServiceImpl<KillCourseMapper, KillCou
 
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     @Override
     public void save(KillCourse killCourse) {
@@ -82,5 +90,45 @@ public class KillCourseServiceImpl extends ServiceImpl<KillCourseMapper, KillCou
         }else {
             throw  new GlobleBusinessException("课程不存在");
         }
+    }
+
+    @Override
+    public String kill(KillCourseDTO killCourseDTO) {
+        //TODO假的登录
+        Long loginId = 3L;
+        //2.判断课程是否存在
+        Object object = redisTemplate.opsForHash().get("activity_" + killCourseDTO.getActivityId(), "course:" + killCourseDTO.getCourseId());
+        if(object == null){
+            throw new GlobleBusinessException("课程不存在");
+        }
+
+        //3.判断时间是不是还在活动中
+        KillCourse killCourse = (KillCourse) object;
+        Date date = new Date();
+        if (date.getTime() > killCourse.getEndTime()){
+            throw new GlobleBusinessException("该课程秒杀活动结束");
+        }
+
+        //4.扣减库存
+        String key = "activity_" + killCourse.getActivityId();
+        RSemaphore semaphore = redissonClient.getSemaphore(key + ":" + killCourse.getCourseId());
+
+        boolean acquire = semaphore.tryAcquire(1);
+        if (!acquire) {
+            throw new GlobleBusinessException("课程卖完了");
+        }
+
+        //5.创建订单
+        RedisOrderDTO redisOrderDTO = new RedisOrderDTO();
+        redisOrderDTO.setOrderNo(CodeGenerateUtils.generateOrderSn(3));
+        redisOrderDTO.setTotalAmount(killCourse.getKillPrice());
+        redisOrderDTO.setCourseId(killCourse.getCourseId());
+        redisOrderDTO.setCoursePic(killCourse.getCoursePic());
+        redisOrderDTO.setCourseName(killCourse.getCourseName());
+        redisOrderDTO.setLoginId(loginId);
+
+        redisTemplate.opsForValue().set("redisOrder:" + redisOrderDTO.getOrderNo(), redisOrderDTO);
+
+        return  redisOrderDTO.getOrderNo();
     }
 }
