@@ -2,6 +2,7 @@ package com.richal.learnonline.service;
 
 import com.richal.learnonline.domain.CourseOrder;
 import com.baomidou.mybatisplus.service.IService;
+import com.richal.learnonline.dto.KillPlaceOrderDto;
 import com.richal.learnonline.dto.PlaceOrderDTO;
 import com.richal.learnonline.dto.UpdateOrderStatusDTO;
 
@@ -20,5 +21,8 @@ public interface ICourseOrderService extends IService<CourseOrder> {
     void saveOrderAndItem(CourseOrder courseOrder);
 
     void updateOrderStatus(UpdateOrderStatusDTO updateOrderStatusDTO);
+
+    String killPlaceOrder(KillPlaceOrderDto killPlaceOrderDto);
+
 
 }

@@ -1,6 +1,7 @@
 package com.richal.learnonline.web.controller;
 
 import com.richal.learnonline.dto.CourseDTO;
+import com.richal.learnonline.dto.KillPlaceOrderDto;
 import com.richal.learnonline.dto.PlaceOrderDTO;
 import com.richal.learnonline.dto.UpdateOrderStatusDTO;
 import com.richal.learnonline.service.ICourseOrderService;
@@ -80,5 +81,11 @@ public class CourseOrderController {
         courseOrderService.updateOrderStatus(updateOrderStatusDTO);
         return JSONResult.success();
 
+    }
+
+    @PostMapping("/killPlaceOrder")
+    public JSONResult killPlaceOrder(@RequestBody KillPlaceOrderDto killPlaceOrderDto){
+        String orderNo = courseOrderService.killPlaceOrder(killPlaceOrderDto);
+        return JSONResult.success();
     }
 }
