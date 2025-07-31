@@ -69,4 +69,10 @@ public class KillCourseController {
         List<KillCourse> killCourses = killCourseService.queryOnlineALL();
         return JSONResult.success(killCourses);
     }
+
+    @GetMapping("/online/one/{activityId}/{courseId}")
+    public JSONResult queryOnlineOne(@PathVariable("activityId") Long activityId,@PathVariable("courseId") Long courseId){
+        KillCourse killCourse = killCourseService.queryOnlineOne(activityId, courseId);
+        return JSONResult.success(killCourse);
+    }
 }

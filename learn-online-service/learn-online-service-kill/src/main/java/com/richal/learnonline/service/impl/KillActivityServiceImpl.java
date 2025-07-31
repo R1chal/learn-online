@@ -69,7 +69,7 @@ public class KillActivityServiceImpl extends ServiceImpl<KillActivityMapper, Kil
             killCourseService.updateById(killCourse);
 
             String key = "activity_" + id;
-            redisTemplate.opsForHash().put(key, "课程：" + killCourse.getCourseId(), killCourse);
+            redisTemplate.opsForHash().put(key, "course:" + killCourse.getCourseId(), killCourse);
             redisTemplate.opsForValue().set("course:" + killCourse.getCourseId(), killCourse.getKillCount());
         });
 

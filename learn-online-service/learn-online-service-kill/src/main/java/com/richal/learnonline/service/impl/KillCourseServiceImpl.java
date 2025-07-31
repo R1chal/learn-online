@@ -73,4 +73,14 @@ public class KillCourseServiceImpl extends ServiceImpl<KillCourseMapper, KillCou
         });
         return  killCourses;
     }
+
+    @Override
+    public KillCourse queryOnlineOne(Long activityId, Long courseId) {
+        Object object = redisTemplate.opsForHash().get("activity_" + activityId, "course:" + courseId);
+        if(object != null){
+            return  (KillCourse) object;
+        }else {
+            throw  new GlobleBusinessException("课程不存在");
+        }
+    }
 }

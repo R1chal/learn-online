@@ -18,4 +18,6 @@ public interface IKillCourseService extends IService<KillCourse> {
     void save(KillCourse killCourse);
 
     List<KillCourse> queryOnlineALL();
+
+    KillCourse queryOnlineOne(Long activityId, Long courseId);
 }

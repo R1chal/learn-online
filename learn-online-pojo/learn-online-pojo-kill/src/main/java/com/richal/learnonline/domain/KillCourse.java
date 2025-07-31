@@ -262,15 +262,28 @@ public class KillCourse extends Model<KillCourse> {
         "}";
     }
 
+    public Boolean isKilling(){
+        Date date = new Date();
+        if(date.after(new Date(startTime)) && date.before(new Date(endTime))){
+            return true;
+        }
+        return false;
+    }
+
     public String getKillStatusName(){
         Date date = new Date();
         if(date.before(new Date(startTime))){
             return "未开始";
-        }else if(date.after(new Date(endTime)) && date.before(new Date(startTime))){
+        }else if(date.after(new Date(startTime)) && date.before(new Date(endTime))){
             return "进行中";
         }else if(date.after(new Date(endTime))){
             return "已结束";
         }
         return null;
+    }
+
+    public Long getTimeDiffMill(){
+        Date date = new Date();
+            return (date.getTime() - startTime) / 1000;
     }
 }
